@@ -11,10 +11,13 @@ import { Flight } from '../../models/flight';
 export class FilterTripComponent {
 
   public noTrips: boolean = false;
+  public sameInputs: boolean = false;
+  public auxOrigin: any;
+  public auxDestination: any;
 
   miFormulario: FormGroup = this.fb.group({
-    origin: [ , [ Validators.required, Validators.maxLength(3) ]   ],
-    destination: [ , [ Validators.required, Validators.maxLength(3)] ]
+    origin: [ , [ Validators.required, Validators.minLength(3) ]   ],
+    destination: [ , [ Validators.required, Validators.minLength(3)] ]
   });
 
   constructor(private fb: FormBuilder,
@@ -26,21 +29,43 @@ export class FilterTripComponent {
       return;
     }
 
-    var origin = this.miFormulario.value.origin;
-    var destination = this.miFormulario.value.destination;
+    if (this.miFormulario.value.origin === this.miFormulario.value.destination) {
+      this.sameInputs = true;
+      setTimeout(() => {
+        this.sameInputs = false;
+      },3000);
+    } else {
+      var origin = this.miFormulario.value.origin;
+      var destination = this.miFormulario.value.destination;
+  
+      this.tripsService.getTrips()
+        .subscribe((response: Flight[]) => {
+          const tripsFiltered = response.filter(flight => {
+            if (flight.departureStation === origin) {
+              this.auxOrigin = origin;
+              this.auxDestination = destination;
+              //TODO: Buscar en el siguiente objeto del array Flight[]
 
-    this.tripsService.getTrips()
-      .subscribe((response: Flight[]) => {
-        const tripsFiltered = response.filter(flight =>
-          flight.departureStation === origin && flight.arrivalStation === destination
+              
+            }
+
+            //TODO:  Buscar el flight siguiente a este, uno cuyo Origin coincida con
+            //       el Destination del que acabo de encontrar
+            if (flight.departureStation === this.auxDestination) {
+              return;
+            }
+          }  
         );
-        if (tripsFiltered.length === 0) {
-          this.noTrips = true;
-          setTimeout(() => {
-            this.noTrips = false;
-          },3000);
-        }
-      });
+
+          if (tripsFiltered.length === 0) {
+            this.noTrips = true;
+            setTimeout(() => {
+              this.noTrips = false;
+            },3000);
+          }
+        });
+    }
+
 
 
     

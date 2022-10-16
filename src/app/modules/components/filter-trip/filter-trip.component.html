@@ -1,45 +1,65 @@
-<div class="card m-5">
+<div class="card m-5 bg-info p-2 text-dark bg-opacity-10">
     <div class="card-body">
         
         <form (ngSubmit)="searchTrips()" autocomplete="off" [formGroup]="miFormulario">
-            <div class="p-3 row">
+            <div class="p-3 row input-group has-validation">
                 <div class="col-xs-12 col-sm-6 col-md-5">
-                    <label for="exampleDataList" class="form-label">Origin</label>
-                    <input
-                        #origin formControlName="origin"
-                        (input)="origin.value = origin.value.toUpperCase()"
-                        class="form-control"
-                        maxlength="3"
-                        type="text"
-                        placeholder="Type the three letters of your origin - Example: BOG">
+                    <label class="form-label">Origin</label>
+                    <div class="form-floating mb-3">
+                        <div class="form-floating mb-3">
+                            <input
+                                [ngClass]=""
+                                class="form-control"
+                                id="floatingInput"
+                                #origin formControlName="origin"
+                                (input)="origin.value = origin.value.toUpperCase()"
+                                maxlength="3"
+                                type="text">
+                            <label for="floatingInput">Type the three letters of your origin - Example: BOG</label>
+                        </div>
+                    </div>
                 </div>
-    
+
                 <div class="col-xs-12 col-sm-6 col-md-5">
-                    <label for="exampleDataList" class="form-label">Destination</label>
-                    <input
-                        #destination formControlName="destination"
-                        (input)="destination.value = destination.value.toUpperCase()"
-                        class="form-control"
-                        maxlength="3"
-                        type="text"
-                        placeholder="Type the three letters of your destination - Example: MAD">
+                    <label class="form-label">Destination</label>
+                    <div class="form-floating mb-3">
+                        <div class="form-floating mb-3">
+                            <input
+                                class="form-control"
+                                id="floatingInput"
+                                #destination formControlName="destination"
+                                (input)="destination.value = destination.value.toUpperCase()"
+                                maxlength="3"
+                                type="text">
+                            <label for="floatingInput">Type the three letters of your destination - Example: MAD</label>
+                        </div>
+                    </div>
                 </div>
     
                 <div class="col-xs-12 col-sm-12 col-md-2 mt-3 searchBtn">
                     <button
                         type="submit"
-                        class="btn btn-primary">
+                        class="btn btn-primary searchBtn"
+                        [disabled]="miFormulario.invalid">
                         Search
                     </button>
                 </div>
             </div>
             <div
                 *ngIf="noTrips"
-                class="alert alert-danger m-3 animate__zoomIn"
+                class="alert alert-danger m-3"
                 role="alert">
-                La ruta no puede ser calculada.
+                Your trip cannot be calculated.
+            </div>
+            <div
+                *ngIf="sameInputs"
+                class="alert alert-danger m-3"
+                role="alert">
+                Origin and Destination must be differents
             </div>
         </form>
 
     </div>
 </div>
+
+<app-results-trip></app-results-trip>

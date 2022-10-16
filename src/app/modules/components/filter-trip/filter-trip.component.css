@@ -1,0 +1,8 @@
+.searchBtn {
+    display: flex;
+    align-items: flex-end;
+}
+
+button {
+    width: 100%;
+}

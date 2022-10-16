@@ -10,7 +10,7 @@ import { Flight } from '../../models/flight';
 })
 export class FilterTripComponent {
 
-  // public flights: Array<Flight> = [];
+  public noTrips: boolean = false;
 
   miFormulario: FormGroup = this.fb.group({
     origin: [ , [ Validators.required, Validators.maxLength(3) ]   ],
@@ -34,6 +34,12 @@ export class FilterTripComponent {
         const tripsFiltered = response.filter(flight =>
           flight.departureStation === origin && flight.arrivalStation === destination
         );
+        if (tripsFiltered.length === 0) {
+          this.noTrips = true;
+          setTimeout(() => {
+            this.noTrips = false;
+          },3000);
+        }
       });
 
 

@@ -22,7 +22,7 @@
                         class="form-control"
                         maxlength="3"
                         type="text"
-                        placeholder="Type the three letters of your origin - Example: MAD">
+                        placeholder="Type the three letters of your destination - Example: MAD">
                 </div>
     
                 <div class="col-xs-12 col-sm-12 col-md-2 mt-3 searchBtn">
@@ -32,6 +32,12 @@
                         Search
                     </button>
                 </div>
+            </div>
+            <div
+                *ngIf="noTrips"
+                class="alert alert-danger m-3 animate__zoomIn"
+                role="alert">
+                La ruta no puede ser calculada.
             </div>
         </form>
 

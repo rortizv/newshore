@@ -11,39 +11,84 @@ import { Flight } from '../../models/flight';
 export class FilterTripComponent {
 
   public noTrips: boolean = false;
+  public sameInputs: boolean = false;
+  public tripsFiltered: Flight[] = [];
+  public arrayFilteredOrigin: Flight[] = [];
+  public arrayFilteredDestination: Flight[] = [];
+  public arrayOrigin: Flight[] = [];
+  public arrayDestination: Flight[] = [];
+  public resultOrigin: Flight[] = [];
+  public resultDestination: Flight[] = [];
 
   miFormulario: FormGroup = this.fb.group({
-    origin: [ , [ Validators.required, Validators.maxLength(3) ]   ],
-    destination: [ , [ Validators.required, Validators.maxLength(3)] ]
+    origin: [, [Validators.required, Validators.minLength(3)]],
+    destination: [, [Validators.required, Validators.minLength(3)]]
   });
 
   constructor(private fb: FormBuilder,
-              private tripsService: TripsService) {}
+    private tripsService: TripsService) { }
 
   searchTrips() {
-    if ( this.miFormulario.invalid )  {
+    if (this.miFormulario.invalid) {
       this.miFormulario.markAllAsTouched();
       return;
     }
 
-    var origin = this.miFormulario.value.origin;
-    var destination = this.miFormulario.value.destination;
+    var origin: string = this.miFormulario.value.origin;
+    var destination: string = this.miFormulario.value.destination;
 
-    this.tripsService.getTrips()
-      .subscribe((response: Flight[]) => {
-        const tripsFiltered = response.filter(flight =>
-          flight.departureStation === origin && flight.arrivalStation === destination
-        );
-        if (tripsFiltered.length === 0) {
-          this.noTrips = true;
-          setTimeout(() => {
-            this.noTrips = false;
-          },3000);
-        }
-      });
-
-
+    origin = origin.toUpperCase();
+    destination = destination.toUpperCase();
     
+    if (origin === destination) {
+      this.sameInputs = true;
+      setTimeout(() => {
+        this.sameInputs = false;
+      }, 3000);
+    } else {
+
+      this.tripsService.getTrips()
+        .subscribe((response: Flight[]) => {
+          this.tripsFiltered = response.filter(flight => {
+            if (flight.departureStation === origin) {
+              this.arrayFilteredOrigin = response.filter(flightFiltered =>
+                flightFiltered.departureStation === origin)
+              this.arrayFilteredDestination = response.filter(originFlightFiltered =>
+                originFlightFiltered.arrivalStation === destination)
+
+              for (let i = 0; i < this.arrayFilteredDestination.length; i++) {
+                for (let j = 0; j < this.arrayFilteredOrigin.length; j++) {
+                  if (this.arrayFilteredDestination[i].departureStation === this.arrayFilteredOrigin[j].arrivalStation) {
+                    this.arrayOrigin.push(this.arrayFilteredOrigin[j]);
+                    this.arrayDestination.push(this.arrayFilteredDestination[i]);
+                  }
+                }
+              }
+
+            }
+          }
+          );
+
+          this.resultOrigin = this.arrayOrigin.filter((item, index) => {
+            return this.arrayOrigin.indexOf(item) === index;
+          });
+
+          this.resultDestination = this.arrayDestination.filter((item, index) => {
+            return this.arrayDestination.indexOf(item) === index;
+          });          
+
+          if (this.tripsFiltered.length === 0) {
+            this.noTrips = true;
+            setTimeout(() => {
+              this.noTrips = false;
+            }, 3000);
+          }
+        });
+    }
+
+
+
+
   }
 
 }

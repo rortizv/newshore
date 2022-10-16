@@ -1,39 +1,39 @@
 <div class="card m-5">
     <div class="card-body">
-        <div class="p-3 row">
-
-            <div class="col-xs-12 col-sm-6 col-md-5">
-                <label for="exampleDataList" class="form-label">Origin</label>
-                <input class="form-control" list="datalistOptions" id="exampleDataList"
-                    placeholder="Type your origin...">
-                <datalist id="datalistOptions">
-                    <option value="San Francisco">
-                    <option value="New York">
-                    <option value="Seattle">
-                    <option value="Los Angeles">
-                    <option value="Chicago">
-                </datalist>
+        
+        <form (ngSubmit)="searchTrips()" autocomplete="off" [formGroup]="miFormulario">
+            <div class="p-3 row">
+                <div class="col-xs-12 col-sm-6 col-md-5">
+                    <label for="exampleDataList" class="form-label">Origin</label>
+                    <input
+                        #origin formControlName="origin"
+                        (input)="origin.value = origin.value.toUpperCase()"
+                        class="form-control"
+                        maxlength="3"
+                        type="text"
+                        placeholder="Type the three letters of your origin - Example: BOG">
+                </div>
+    
+                <div class="col-xs-12 col-sm-6 col-md-5">
+                    <label for="exampleDataList" class="form-label">Destination</label>
+                    <input
+                        #destination formControlName="destination"
+                        (input)="destination.value = destination.value.toUpperCase()"
+                        class="form-control"
+                        maxlength="3"
+                        type="text"
+                        placeholder="Type the three letters of your origin - Example: MAD">
+                </div>
+    
+                <div class="col-xs-12 col-sm-12 col-md-2 mt-3 searchBtn">
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+                        Search
+                    </button>
+                </div>
             </div>
+        </form>
 
-            <div class="col-xs-12 col-sm-6 col-md-5">
-                <label for="exampleDataList" class="form-label">Destination</label>
-                <input class="form-control" list="datalistOptions" id="exampleDataList"
-                    placeholder="Type your destination...">
-                <datalist id="datalistOptions">
-                    <option value="San Francisco">
-                    <option value="New York">
-                    <option value="Seattle">
-                    <option value="Los Angeles">
-                    <option value="Chicago">
-                </datalist>
-            </div>
-
-            <div class="col-xs-12 col-sm-12 col-md-2 mt-3 searchBtn">
-                <button type="button" class="btn btn-primary">
-                    Search
-                </button>
-            </div>
-
-        </div>
     </div>
 </div>

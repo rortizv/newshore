@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { SharedModule } from '../shared/shared.module';
 import { FilterTripComponent } from './components/filter-trip/filter-trip.component';
@@ -18,6 +20,8 @@ import { TripsRoutingModule } from './trips-routing.module';
   imports: [
     CommonModule,
     SharedModule,
+    ReactiveFormsModule,
+    HttpClientModule,
     TripsRoutingModule
   ]
 })

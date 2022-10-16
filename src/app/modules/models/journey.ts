@@ -2,7 +2,7 @@ import { Flight } from "./flight";
 
 
 export interface Journey {
-    fligths: Flight[];
+    flights: Flight[];
     origin: string;
     destination: string;
     price: number;

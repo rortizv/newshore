@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
 import { Flight } from '../modules/models/flight';
 
@@ -8,13 +8,10 @@ import { Flight } from '../modules/models/flight';
 })
 export class TripsService {
 
-  private API_URL: string = environment.API_URL;
-
   constructor(private http: HttpClient) { }
 
-  public async getTrips() {
-    const peticion = await this.http.get(this.API_URL);
-    console.log(peticion);
+  public getTrips() {
+    return this.http.get<Flight[]>(environment.API_URL);
   }
 
 }

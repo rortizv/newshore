@@ -39,7 +39,7 @@ export class FilterTripComponent {
 
     origin = origin.toUpperCase();
     destination = destination.toUpperCase();
-    
+
     if (origin === destination) {
       this.sameInputs = true;
       setTimeout(() => {
@@ -49,35 +49,29 @@ export class FilterTripComponent {
 
       this.tripsService.getTrips()
         .subscribe((response: Flight[]) => {
-          this.tripsFiltered = response.filter(flight => {
-            if (flight.departureStation === origin) {
-              this.arrayFilteredOrigin = response.filter(flightFiltered =>
-                flightFiltered.departureStation === origin)
-              this.arrayFilteredDestination = response.filter(originFlightFiltered =>
-                originFlightFiltered.arrivalStation === destination)
+          this.arrayFilteredOrigin = response.filter(flight => flight.departureStation === origin)
+          this.arrayFilteredDestination = response.filter(Flight => Flight.arrivalStation === destination)
 
-              for (let i = 0; i < this.arrayFilteredDestination.length; i++) {
-                for (let j = 0; j < this.arrayFilteredOrigin.length; j++) {
-                  if (this.arrayFilteredDestination[i].departureStation === this.arrayFilteredOrigin[j].arrivalStation) {
-                    this.arrayOrigin.push(this.arrayFilteredOrigin[j]);
-                    this.arrayDestination.push(this.arrayFilteredDestination[i]);
-                  }
-                }
+          for (let i = 0; i < this.arrayFilteredDestination.length; i++) {
+            for (let j = 0; j < this.arrayFilteredOrigin.length; j++) {
+              if (this.arrayFilteredDestination[i].departureStation === this.arrayFilteredOrigin[j].arrivalStation) {
+                this.arrayOrigin.push(this.arrayFilteredOrigin[j]);
+                this.arrayDestination.push(this.arrayFilteredDestination[i]);
               }
-
             }
           }
-          );
 
           this.resultOrigin = this.arrayOrigin.filter((item, index) => {
             return this.arrayOrigin.indexOf(item) === index;
           });
+          console.log(this.resultOrigin);
 
           this.resultDestination = this.arrayDestination.filter((item, index) => {
             return this.arrayDestination.indexOf(item) === index;
-          });          
+          });
+          console.log(this.resultDestination);
 
-          if (this.tripsFiltered.length === 0) {
+          if (this.resultDestination.length === 0) {
             this.noTrips = true;
             setTimeout(() => {
               this.noTrips = false;
